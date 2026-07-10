@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><circle cx='24' cy='24' r='22' fill='%231b2a4d'/><rect x='21' y='9' width='6' height='30' rx='1.5' fill='%23c9a227'/><rect x='12' y='18' width='24' height='6' rx='1.5' fill='%23c9a227'/></svg>">
+<meta name="description" content="Christ Lutheran Church &amp; Preschool, West Covina — a Christ-centered, multicultural family worshiping in English and Mandarin. Plan a visit, watch sermons, and grow in the Word.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Christ Lutheran Church &amp; Preschool — West Covina">
+<meta property="og:description" content="You belong here. Worship in English &amp; Mandarin · Preschool · Bible Learning Center in three languages.">
+<meta property="og:image" content="https://frankqian-dot.github.io/clc-demo/assets/hero.jpg">
+
 <title>Christ Lutheran Church &amp; Preschool — West Covina</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -319,6 +326,13 @@ footer a:hover{opacity:1;color:var(--gold-soft)}
   .visit,.fgrid{grid-template-columns:1fr}
   .frow{grid-template-columns:1fr}
 }
+
+/* mobile nav drawer */
+.mnav{display:none;position:fixed;top:70px;left:0;right:0;z-index:59;background:var(--deep);border-bottom:1px solid rgba(255,255,255,.12);padding:10px 26px 22px;flex-direction:column;box-shadow:0 24px 40px -20px rgba(0,0,0,.5)}
+.mnav a{color:#e9edf5;font-size:16.5px;font-weight:600;padding:13px 2px;border-bottom:1px solid rgba(255,255,255,.07)}
+.mnav a:last-child{border-bottom:0;color:var(--gold-soft)}
+body.mopen .mnav{display:flex}
+section{scroll-margin-top:84px}
 </style>
 </head>
 <body>
@@ -355,7 +369,7 @@ footer a:hover{opacity:1;color:var(--gold-soft)}
       <button data-lang="es">ES</button>
     </div>
     <a href="#connect" class="btn btn-gold" data-i18n="nav_connect">I'm New</a>
-    <button class="burger" onclick="document.querySelector('.nav').scrollIntoView()"><i></i><i></i><i></i></button>
+    <button class="burger" aria-label="Menu"><i></i><i></i><i></i></button>
   </div>
 </header>
 
@@ -534,7 +548,7 @@ footer a:hover{opacity:1;color:var(--gold-soft)}
         <div class="amt">$25</div><div class="amt on">$50</div><div class="amt">$100</div><div class="amt">$250</div>
         <div class="amt" data-i18n="give_other">Other</div>
       </div>
-      <a href="#" class="btn btn-gold" data-i18n="give_cta">Give Now →</a>
+      <a href="https://tithe.ly/give_new/www/#/tithely/give" target="_blank" rel="noopener" class="btn btn-gold" data-i18n="give_cta">Give Now →</a>
       <p class="note" data-i18n="give_note">Secure giving · One-time or monthly · Tax-deductible</p>
     </div>
     <div class="glass photo" style="aspect-ratio:1/.72;background-image:url('assets/give.jpg')">
@@ -637,9 +651,9 @@ footer a:hover{opacity:1;color:var(--gold-soft)}
       </div>
       <div>
         <h4 data-i18n="foot_conn">Connect</h4>
-        <a href="#" data-i18n="foot_c1">Facebook</a>
-        <a href="#" data-i18n="foot_c2">YouTube</a>
-        <a href="#" data-i18n="foot_c3">Instagram</a>
+        <a href="https://www.facebook.com/clcwc" target="_blank" rel="noopener" data-i18n="foot_c1">Facebook</a>
+        <a href="https://www.youtube.com/channel/UCCSL6hjBw3AaioofTH3RqOw" target="_blank" rel="noopener" data-i18n="foot_c2">YouTube</a>
+        <a href="https://instagram.com/christlutheranchurch" target="_blank" rel="noopener" data-i18n="foot_c3">Instagram</a>
         <a href="#" data-i18n="foot_c4">Download our App</a>
       </div>
     </div>
@@ -964,6 +978,28 @@ let rdLoaded=false;
 document.querySelector('[data-p="full"]').addEventListener('click',()=>{if(!rdLoaded){rdLoaded=true;loadChap();}});
 
 }catch(_e){/* learning center lives on bible.html */}
+
+
+/* ---------- mobile menu (cloned from desktop nav, page-agnostic) ---------- */
+(function(){
+  const nav=document.querySelector('.nav'),burger=document.querySelector('.burger');
+  if(!nav||!burger)return;
+  const m=document.createElement('div');m.className='mnav';
+  const cta=document.querySelector('.top a.btn-gold');
+  m.innerHTML=nav.innerHTML+(cta?'<a href="'+cta.getAttribute('href')+'" data-i18n="nav_connect">'+cta.innerHTML+'</a>':'');
+  document.body.appendChild(m);
+  burger.onclick=()=>document.body.classList.toggle('mopen');
+  m.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('mopen')));
+})();
+/* ---------- demo form feedback ---------- */
+(function(){
+  const MSG={en:"\u2713 Sent! We'll be in touch soon.",zh:"\u2713 \u5df2\u6536\u5230\uff01\u6211\u4eec\u4f1a\u5c3d\u5feb\u8054\u7cfb\u4f60\u3002",es:"\u2713 \u00a1Enviado! Te contactaremos pronto."};
+  document.querySelectorAll('[data-i18n="f_submit"],[data-i18n="pr_submit"],[data-i18n="nl_btn"]').forEach(b=>{
+    b.addEventListener('click',e=>{e.preventDefault();
+      const l=document.documentElement.lang||'en';
+      b.textContent=MSG[l]||MSG.en;b.disabled=true;b.style.opacity=.88;b.removeAttribute('data-i18n');});
+  });
+})();
 
 /* init */
 setLang(localStorage.getItem('clc_lang')||'en');
