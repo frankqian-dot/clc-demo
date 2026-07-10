@@ -231,6 +231,28 @@ section{position:relative}
 .gq p{font-size:14px;color:var(--stone)}
 .storywrap{display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:stretch}
 .story{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:30px}
+/* full bible reader */
+.lectio{background:linear-gradient(160deg,#16294a,#0c1c38);color:#fff;border-radius:16px;padding:22px 26px;margin-bottom:20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.lectio .lt{flex:1 1 200px}
+.lectio .lt b{font-family:var(--serif);font-size:17px;display:block}
+.lectio .lt span{font-size:12.5px;color:var(--gold-soft)}
+.lectio .lr{display:flex;gap:8px;flex-wrap:wrap}
+.lectio .lr button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:99px;padding:7px 14px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+.lectio .lr button:hover{background:var(--gold);color:#20160a;border-color:var(--gold)}
+.rdbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.rdbar select{border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-family:var(--sans);font-size:14.5px;background:var(--paper);color:var(--ink);cursor:pointer}
+.rdbar .rmode{display:flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;background:var(--paper)}
+.rdbar .rmode button{border:0;background:none;padding:9px 16px;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--stone);cursor:pointer}
+.rdbar .rmode button.on{background:var(--ink);color:#fff}
+.reader{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:30px;max-height:520px;overflow-y:auto}
+.reader h4{font-family:var(--serif);font-size:22px;margin-bottom:16px}
+.rv-row{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #f2eee4}
+.rv-n{flex:0 0 30px;font-family:var(--serif);font-weight:600;color:var(--gold);font-size:14px;text-align:right}
+.rv-t{flex:1}
+.rv-en{font-family:var(--serif);font-size:16.5px;line-height:1.65}
+.rv-zh{font-size:15px;line-height:1.8;color:#41506b;margin-top:4px}
+.reader .loading{text-align:center;color:var(--stone);padding:40px 0;font-size:14.5px}
+.rd-note{font-size:12.5px;color:var(--stone);margin-top:12px}
 /* bulletin */
 .bull{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;color:var(--ink);border:1.5px dashed var(--gold);border-radius:12px;padding:11px 16px;transition:.2s;justify-content:center}
 .bull:hover{background:var(--gold);color:#20160a}
@@ -511,6 +533,7 @@ footer a:hover{opacity:1;color:var(--gold-soft)}
       <button class="lc-tab" data-p="mem" data-i18n="lct3">Weekly Memory Verse</button>
       <button class="lc-tab" data-p="guide" data-i18n="lct4">Sermon Study Guide</button>
       <button class="lc-tab" data-p="kids" data-i18n="lct5">Kids &amp; Family</button>
+      <button class="lc-tab" data-p="full" data-i18n="lct6">&#128214; Full Bible</button>
     </div>
 
     <!-- panel 1: parallel reading -->
@@ -593,6 +616,33 @@ footer a:hover{opacity:1;color:var(--gold-soft)}
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- panel 6: full bible reader -->
+    <div class="lc-panel" id="lcp-full">
+      <div class="lectio">
+        <div class="lt">
+          <b data-i18n="lec_h">This Sunday's Readings · Lectionary 15</b>
+          <span data-i18n="lec_s">Sunday, July 12 · Revised Common Lectionary, as used in ELCA worship</span>
+        </div>
+        <div class="lr">
+          <button data-go="23,55">Isaiah 55</button>
+          <button data-go="19,65">Psalm 65</button>
+          <button data-go="45,8">Romans 8</button>
+          <button data-go="40,13">Matthew 13</button>
+        </div>
+      </div>
+      <div class="rdbar">
+        <select id="rdBook"></select>
+        <select id="rdChap"></select>
+        <div class="rmode">
+          <button id="rmDual" class="on" data-i18n="rd_dual">English + 中文</button>
+          <button id="rmEn" data-i18n="rd_en">English only</button>
+          <button id="rmZh" data-i18n="rd_zh">只看中文</button>
+        </div>
+      </div>
+      <div class="reader" id="reader"><div class="loading" data-i18n="rd_loading">Loading Scripture…</div></div>
+      <p class="rd-note" data-i18n="rd_note">King James Version + Chinese Union Version (public domain). On the full site, the NRSV — the translation used in ELCA worship — can be added under license.</p>
     </div>
   </div>
 </section>
@@ -784,7 +834,8 @@ const I18N={
   lc_church:"This month our church family has read <b>1,284</b> chapters together — and you've added",
   mem_hint:"Tap the card to hide & test yourself",mem_b1:"Box 1",mem_b1s:"review today",mem_b2:"Box 2",mem_b2s:"in 3 days",mem_b3:"Box 3",mem_b3s:"in 7 days",mem_p:"Each verse moves up a box when you remember it — and the review comes back right before you'd forget. One verse a week, fifty-two a year.",mem_got:"I remembered ✓",mem_again:"Practice again",
   gd_tag:"AI-drafted from Sunday's message · reviewed by the pastor · sample",gd_use:"For small groups & Pastor's Bible Study this week",gd_note:"In the full version, a new guide is generated automatically from each Sunday's sermon video and approved by the pastor before publishing.",
-  kd_tag:"This week's family story",kd_act:"Do together",kd_a1:"Draw the shepherd finding his little sheep, and bring your picture on Sunday for the children's wall.",kd_a2:"Ask at bedtime: when did YOU feel found and safe this week?",kd_pre:"Our preschool tells one of these stories every week.",kd_cta:"Ask about Preschool enrollment →",ai_s5:"A Bible question?"
+  kd_tag:"This week's family story",kd_act:"Do together",kd_a1:"Draw the shepherd finding his little sheep, and bring your picture on Sunday for the children's wall.",kd_a2:"Ask at bedtime: when did YOU feel found and safe this week?",kd_pre:"Our preschool tells one of these stories every week.",kd_cta:"Ask about Preschool enrollment →",ai_s5:"A Bible question?",
+  lct6:"&#128214; Full Bible",lec_h:"This Sunday's Readings · Lectionary 15",lec_s:"Sunday, July 12 · Revised Common Lectionary, as used in ELCA worship",rd_dual:"English + 中文",rd_en:"English only",rd_zh:"只看中文",rd_loading:"Loading Scripture…",rd_note:"King James Version + Chinese Union Version (public domain). On the full site, the NRSV — the translation used in ELCA worship — can be added under license."
  },
  zh:{
   brandsub:"教会与幼儿园",nav_visit:"计划到访",nav_about:"关于我们",nav_watch:"讲道",nav_min:"事工",nav_give:"奉献",nav_connect:"我是新朋友",
@@ -814,7 +865,8 @@ const I18N={
   lc_church:"本月全教会已一起读了 <b>1,284</b> 章——你贡献了",
   mem_hint:"点卡片隐藏经文，测测自己",mem_b1:"第一盒",mem_b1s:"今天复习",mem_b2:"第二盒",mem_b2s:"3 天后",mem_b3:"第三盒",mem_b3s:"7 天后",mem_p:"记住了就升一盒，快忘的时候复习正好回来。一周一节，一年五十二节。",mem_got:"我记住了 ✓",mem_again:"再练一次",
   gd_tag:"AI 根据主日讲道起草 · 牧师审核 · 示例",gd_use:"本周小组查经与牧师查经班使用",gd_note:"完整版中，每周讲道视频会自动生成新的查经指南，经牧师审核后发布。",
-  kd_tag:"本周亲子故事",kd_act:"一起动手",kd_a1:"画一画牧羊人找到小羊的样子，主日带来贴到儿童墙上。",kd_a2:"睡前问问孩子：这周你什么时候感觉被找到、很安心？",kd_pre:"我们幼儿园每周都讲一个这样的圣经故事。",kd_cta:"咨询幼儿园报名 →",ai_s5:"圣经问题？"
+  kd_tag:"本周亲子故事",kd_act:"一起动手",kd_a1:"画一画牧羊人找到小羊的样子，主日带来贴到儿童墙上。",kd_a2:"睡前问问孩子：这周你什么时候感觉被找到、很安心？",kd_pre:"我们幼儿园每周都讲一个这样的圣经故事。",kd_cta:"咨询幼儿园报名 →",ai_s5:"圣经问题？",
+  lct6:"&#128214; 全本圣经",lec_h:"本主日经课 · Lectionary 15",lec_s:"7 月 12 日主日 · 信义会（ELCA）礼拜使用的通用经课表",rd_dual:"中英对照",rd_en:"只看英文",rd_zh:"只看中文",rd_loading:"经文加载中…",rd_note:"KJV + 和合本（公有领域）。正式版可授权接入 NRSV——ELCA 礼拜使用的译本。"
  },
  es:{
   brandsub:"Iglesia y Preescolar",nav_visit:"Planea tu Visita",nav_about:"Quiénes Somos",nav_watch:"Sermones",nav_min:"Ministerios",nav_give:"Ofrendar",nav_connect:"Soy Nuevo",
@@ -844,7 +896,8 @@ const I18N={
   lc_church:"Este mes nuestra familia de fe ha leído <b>1,284</b> capítulos juntos — y tú has añadido",
   mem_hint:"Toca la tarjeta para ocultar y ponerte a prueba",mem_b1:"Caja 1",mem_b1s:"repasa hoy",mem_b2:"Caja 2",mem_b2s:"en 3 días",mem_b3:"Caja 3",mem_b3s:"en 7 días",mem_p:"Cada versículo sube de caja cuando lo recuerdas — y el repaso vuelve justo antes de que lo olvides. Un versículo por semana, cincuenta y dos al año.",mem_got:"Lo recordé ✓",mem_again:"Practicar de nuevo",
   gd_tag:"Borrador de IA del mensaje dominical · revisado por el pastor · ejemplo",gd_use:"Para grupos pequeños y el estudio bíblico del pastor esta semana",gd_note:"En la versión completa, cada domingo se genera automáticamente una nueva guía del video del sermón, aprobada por el pastor antes de publicarse.",
-  kd_tag:"Historia familiar de la semana",kd_act:"Hagan juntos",kd_a1:"Dibuja al pastor encontrando a su ovejita y tráelo el domingo para el mural de los niños.",kd_a2:"Pregunta antes de dormir: ¿cuándo te sentiste encontrado y seguro esta semana?",kd_pre:"Nuestro preescolar cuenta una de estas historias cada semana.",kd_cta:"Pregunta por el preescolar →",ai_s5:"¿Una pregunta bíblica?"
+  kd_tag:"Historia familiar de la semana",kd_act:"Hagan juntos",kd_a1:"Dibuja al pastor encontrando a su ovejita y tráelo el domingo para el mural de los niños.",kd_a2:"Pregunta antes de dormir: ¿cuándo te sentiste encontrado y seguro esta semana?",kd_pre:"Nuestro preescolar cuenta una de estas historias cada semana.",kd_cta:"Pregunta por el preescolar →",ai_s5:"¿Una pregunta bíblica?",
+  lct6:"&#128214; Biblia Completa",lec_h:"Lecturas de este Domingo · Leccionario 15",lec_s:"Domingo 12 de julio · Leccionario Común Revisado, usado en el culto de la ELCA",rd_dual:"Inglés + Chino",rd_en:"Solo inglés",rd_zh:"Solo chino",rd_loading:"Cargando la Escritura…",rd_note:"KJV + Versión Unión China (dominio público). En el sitio completo se puede licenciar la NRSV — la versión usada en el culto de la ELCA."
  }
 };
 /* verse of the day — rotates daily */
@@ -984,6 +1037,53 @@ document.getElementById('memGot').onclick=e=>{e.stopPropagation();
 document.getElementById('memAgain').onclick=e=>{e.stopPropagation();
   localStorage.setItem('clc_mem_box',1);memcard.classList.add('hide');memDraw();};
 memDraw();
+
+/* ---------- Full Bible reader (getbible.net v2 · KJV + 和合本 · CORS-open) ---------- */
+const BOOKS=[["Genesis","创世记",50],["Exodus","出埃及记",40],["Leviticus","利未记",27],["Numbers","民数记",36],["Deuteronomy","申命记",34],["Joshua","约书亚记",24],["Judges","士师记",21],["Ruth","路得记",4],["1 Samuel","撒母耳记上",31],["2 Samuel","撒母耳记下",24],["1 Kings","列王纪上",22],["2 Kings","列王纪下",25],["1 Chronicles","历代志上",29],["2 Chronicles","历代志下",36],["Ezra","以斯拉记",10],["Nehemiah","尼希米记",13],["Esther","以斯帖记",10],["Job","约伯记",42],["Psalms","诗篇",150],["Proverbs","箴言",31],["Ecclesiastes","传道书",12],["Song of Solomon","雅歌",8],["Isaiah","以赛亚书",66],["Jeremiah","耶利米书",52],["Lamentations","耶利米哀歌",5],["Ezekiel","以西结书",48],["Daniel","但以理书",12],["Hosea","何西阿书",14],["Joel","约珥书",3],["Amos","阿摩司书",9],["Obadiah","俄巴底亚书",1],["Jonah","约拿书",4],["Micah","弥迦书",7],["Nahum","那鸿书",3],["Habakkuk","哈巴谷书",3],["Zephaniah","西番雅书",3],["Haggai","哈该书",2],["Zechariah","撒迦利亚书",14],["Malachi","玛拉基书",4],["Matthew","马太福音",28],["Mark","马可福音",16],["Luke","路加福音",24],["John","约翰福音",21],["Acts","使徒行传",28],["Romans","罗马书",16],["1 Corinthians","哥林多前书",16],["2 Corinthians","哥林多后书",13],["Galatians","加拉太书",6],["Ephesians","以弗所书",6],["Philippians","腓立比书",4],["Colossians","歌罗西书",4],["1 Thessalonians","帖撒罗尼迦前书",5],["2 Thessalonians","帖撒罗尼迦后书",3],["1 Timothy","提摩太前书",6],["2 Timothy","提摩太后书",4],["Titus","提多书",3],["Philemon","腓利门书",1],["Hebrews","希伯来书",13],["James","雅各书",5],["1 Peter","彼得前书",5],["2 Peter","彼得后书",3],["1 John","约翰一书",5],["2 John","约翰二书",1],["3 John","约翰三书",1],["Jude","犹大书",1],["Revelation","启示录",22]];
+const rdBook=document.getElementById('rdBook'),rdChap=document.getElementById('rdChap'),reader=document.getElementById('reader');
+let rdMode='dual';const rdCache={};
+BOOKS.forEach((b,i)=>{const o=document.createElement('option');o.value=i+1;o.textContent=b[0]+' · '+b[1];rdBook.appendChild(o);});
+function fillChaps(n){rdChap.innerHTML='';const total=BOOKS[n-1][2];for(let c=1;c<=total;c++){const o=document.createElement('option');o.value=c;o.textContent=c;rdChap.appendChild(o);}}
+async function getChap(tr,b,c){const k=tr+'/'+b+'/'+c;if(rdCache[k])return rdCache[k];
+  const r=await fetch('https://api.getbible.net/v2/'+tr+'/'+b+'/'+c+'.json');if(!r.ok)throw 0;
+  const d=await r.json();rdCache[k]=d;return d;}
+async function loadChap(){
+  const b=+rdBook.value,c=+rdChap.value,bk=BOOKS[b-1];
+  reader.innerHTML='<div class="loading">…</div>';
+  try{
+    const jobs=[];
+    if(rdMode!=='zh')jobs.push(getChap('kjv',b,c));else jobs.push(null);
+    if(rdMode!=='en')jobs.push(getChap('cus',b,c));else jobs.push(null);
+    const [en,zh]=await Promise.all(jobs);
+    let h='<h4>'+bk[0]+' '+c+' · '+bk[1]+' '+c+'</h4>';
+    const n=(en?en.verses.length:zh.verses.length);
+    for(let i=0;i<n;i++){
+      h+='<div class="rv-row"><div class="rv-n">'+(i+1)+'</div><div class="rv-t">';
+      if(en&&en.verses[i])h+='<div class="rv-en">'+en.verses[i].text+'</div>';
+      if(zh&&zh.verses[i])h+='<div class="rv-zh">'+zh.verses[i].text+'</div>';
+      h+='</div></div>';
+    }
+    reader.innerHTML=h;reader.scrollTop=0;
+  }catch(e){
+    reader.innerHTML='<div class="loading">Could not load Scripture right now — please try again in a moment.<br>暂时无法加载经文，请稍后再试。</div>';
+  }
+}
+rdBook.onchange=()=>{fillChaps(+rdBook.value);loadChap();};
+rdChap.onchange=loadChap;
+[['rmDual','dual'],['rmEn','en'],['rmZh','zh']].forEach(([id,m])=>{
+  document.getElementById(id).onclick=()=>{rdMode=m;
+    ['rmDual','rmEn','rmZh'].forEach(x=>document.getElementById(x).classList.toggle('on',x===id));
+    loadChap();};
+});
+/* lectionary quick-jump */
+document.querySelectorAll('.lectio [data-go]').forEach(b=>b.onclick=()=>{
+  const [bk,ch]=b.dataset.go.split(',').map(Number);
+  rdBook.value=bk;fillChaps(bk);rdChap.value=ch;loadChap();
+});
+/* default: John 3, lazy-load on first open of the tab */
+rdBook.value=43;fillChaps(43);rdChap.value=3;
+let rdLoaded=false;
+document.querySelector('[data-p="full"]').addEventListener('click',()=>{if(!rdLoaded){rdLoaded=true;loadChap();}});
 
 /* init */
 setLang(localStorage.getItem('clc_lang')||'en');
